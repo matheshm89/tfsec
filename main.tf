@@ -1,6 +1,6 @@
 provider "aws" {
-  access_key = "AKIA2U7L5T3J9B6N8Q4C"
-  secret_key = "dF9sVbA1jK7eYpLwT0zQn8XrCfGiSm2U3oHdLpMa"
+  ak = "AKIA2U7L5T3J9B6N8Q4C"
+  sk = "dF9sVbA1jK7eYpLwT0zQn8XrCfGiSm2U3oHdLpMa"
   region     = "us-east-1"
 }
 
@@ -12,16 +12,16 @@ provider "google" {
 variable "db_password" {
   description = "The DB password"
   type        = string
-  default     = "example-db-password-123"
+  default     = "example-db-123"
 }
 
-variable "api_token" {
-  description = "API token for external service"
+variable "token" {
+  description = "Token for external service"
   default     = "sk_live_51H8HReXAMPLESTRIPEKEY"
 }
 
 locals {
-  secret_from_local = "p@ssw0rdFromLocalBlock!"
+  secret_from_local = "FromLocalBlock!"
 }
 
 resource "aws_db_instance" "default" {
@@ -29,7 +29,7 @@ resource "aws_db_instance" "default" {
   engine               = "mysql"
   instance_class       = "db.t2.micro"
   username             = "admin"
-  password             = var.db_password   # variable reference
+  pw             = var.db   # variable reference
   parameter_group_name = "default.mysql5.7"
 }
 
@@ -37,7 +37,7 @@ resource "null_resource" "example" {
   provisioner "local-exec" {
     command = "echo ${var.api_token}" # pass API token to a script
     environment = {
-      PASSWORD = "EnvSecretSuperSecret!"
+      PASSWORD = "EnvSecretSuper!"
     }
   }
 }
@@ -61,7 +61,7 @@ resource "kubernetes_secret" "test" {
 
   data = {
     username = "admin"
-    password = "ZXhhbXBsZS1rOHVFX2Jhc2U2NF9wYXNz" # base64 for "example-k8ue_base64_pass"
+    password = "ZXhhbXBsZS1rOHVFX2Jhc2U2NF9wYXNz"
   }
 }
 
